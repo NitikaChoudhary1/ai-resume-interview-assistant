@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pdfplumber
 import os
@@ -25,7 +25,7 @@ SKILLS = [
 
 @app.route("/")
 def home():
-    return "AI Resume Interview Assistant Backend is running!"
+    return send_from_directory(".", "index.html")
 
 
 def extract_text_from_pdf(file_path):
