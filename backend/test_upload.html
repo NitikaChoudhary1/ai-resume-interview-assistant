@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>AI Resume Analyzer</h2>
+
+  <form action="http://127.0.0.1:5000/analyze-resume" method="POST" enctype="multipart/form-data">
+    <label>Upload Resume PDF:</label><br>
+    <input type="file" name="resume" required><br><br>
+
+    <label>Paste Job Description:</label><br>
+    <textarea name="job_description" rows="10" cols="80" required></textarea><br><br>
+
+    <button type="submit">Analyze Resume</button>
+  </form>
+</body>
+</html>

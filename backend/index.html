@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Resume + Interview Assistant</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      color: #222;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 40px auto;
+      background: white;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #1f3c88;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background: #1f3c88;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #162d66;
+    }
+
+    .download-btn {
+      background: #0f7b4f;
+    }
+
+    .download-btn:hover {
+      background: #095d3b;
+    }
+
+    .mock-btn {
+      background: #7b1fa2;
+    }
+
+    .mock-btn:hover {
+      background: #5e1680;
+    }
+
+    .record-btn {
+      background: #c62828;
+    }
+
+    .record-btn:hover {
+      background: #9f1f1f;
+    }
+
+    .stop-btn {
+      background: #ef6c00;
+    }
+
+    .stop-btn:hover {
+      background: #c65a00;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #1f3c88;
+    }
+
+    .recording-status {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      color: #c62828;
+    }
+
+    .result {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .score-card {
+      background: #eef3ff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .score {
+      font-size: 42px;
+      color: #1f3c88;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #fafafa;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .section-card {
+      background: #fff8e6;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #f1d48a;
+      margin-top: 20px;
+    }
+
+    .section-card h3 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .bullet-card {
+      background: #eefaf1;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #b8e6c2;
+      margin-top: 20px;
+    }
+
+    .bullet-card h3 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .mock-card {
+      background: #f7edff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #d7b8ef;
+      margin-top: 25px;
+    }
+
+    .mock-card h3 {
+      color: #7b1fa2;
+      margin-top: 0;
+    }
+
+    .feedback-score {
+      font-size: 22px;
+      font-weight: bold;
+      color: #7b1fa2;
+    }
+
+    .star-box {
+      background: #f8f8f8;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>AI Resume + Interview Assistant</h1>
+
+  <p class="subtitle">
+    Upload your resume and paste a job description to analyze ATS score,
+    improve resume quality, prepare for interviews, and practice with voice feedback.
+  </p>
+
+  <label>Upload Resume (PDF or DOCX)</label>
+  <input type="file" id="resume" accept=".pdf,.docx">
+
+  <label>Paste Job Description</label>
+  <textarea id="job_description" rows="10" placeholder="Paste the job description here..."></textarea>
+
+  <button onclick="analyzeResume()">Analyze Resume</button>
+
+  <div class="loading" id="loading">
+    Analyzing resume... Please wait.
+  </div>
+
+  <div class="result" id="result">
+
+    <div id="reportContent">
+
+      <div class="score-card">
+        <h2>ATS Match Score</h2>
+        <div class="score" id="matchScore"></div>
+      </div>
+
+      <div class="grid">
+
+        <div class="card">
+          <h3>Matched Skills</h3>
+          <ul id="matchedSkills"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Missing Skills</h3>
+          <ul id="missingSkills"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Strong Keywords</h3>
+          <ul id="strongKeywords"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Weak Sections</h3>
+          <ul id="weakSections"></ul>
+        </div>
+
+      </div>
+
+      <div class="grid">
+
+        <div class="section-card">
+          <h3>Education</h3>
+          <ul id="education"></ul>
+        </div>
+
+        <div class="section-card">
+          <h3>Experience</h3>
+          <ul id="experience"></ul>
+        </div>
+
+      </div>
+
+      <div class="grid">
+
+        <div class="section-card">
+          <h3>Projects</h3>
+          <ul id="projects"></ul>
+        </div>
+
+        <div class="section-card">
+          <h3>Certifications</h3>
+          <ul id="certifications"></ul>
+        </div>
+
+      </div>
+
+      <div class="section-card">
+        <h3>Improved Professional Summary</h3>
+        <p id="improvedSummary"></p>
+      </div>
+
+      <div class="bullet-card">
+        <h3>Better Project Descriptions</h3>
+        <ul id="betterProjects"></ul>
+      </div>
+
+      <div class="section-card">
+        <h3>Role-Specific Keywords</h3>
+        <ul id="roleKeywords"></ul>
+      </div>
+
+      <div class="section-card">
+        <h3>Resume Improvement Suggestions</h3>
+        <ul id="resumeSuggestions"></ul>
+      </div>
+
+      <div class="bullet-card">
+        <h3>ATS-Friendly Resume Bullet Points</h3>
+        <ul id="resumeBullets"></ul>
+      </div>
+
+      <div class="grid">
+
+        <div class="section-card">
+          <h3>HR Questions</h3>
+          <ul id="hrQuestions"></ul>
+        </div>
+
+        <div class="section-card">
+          <h3>Technical Questions</h3>
+          <ul id="technicalQuestions"></ul>
+        </div>
+
+      </div>
+
+      <div class="section-card">
+        <h3>Behavioral Questions</h3>
+        <ul id="behavioralQuestions"></ul>
+      </div>
+
+      <div class="section-card">
+        <h3>STAR Format Answers</h3>
+        <div id="starAnswers"></div>
+      </div>
+
+    </div>
+
+    <button class="download-btn" onclick="downloadReport()">
+      Download Report
+    </button>
+
+    <div class="mock-card">
+
+      <h3>Mock Interview Feedback</h3>
+
+      <label>Type Your Interview Answer</label>
+      <textarea id="mockAnswer" rows="8" placeholder="Type your interview answer here..."></textarea>
+
+      <button class="mock-btn" onclick="getMockFeedback()">
+        Analyze Typed Answer
+      </button>
+
+      <button class="record-btn" onclick="startRecording()">
+        Start Voice Recording
+      </button>
+
+      <button class="stop-btn" onclick="stopRecording()">
+        Stop Recording & Analyze
+      </button>
+
+      <div class="recording-status" id="recordingStatus">
+        Recording... speak your answer now.
+      </div>
+
+      <div id="mockFeedbackResult" style="display:none; margin-top:20px;">
+
+        <p class="feedback-score">
+          Clarity Score:
+          <span id="clarityScore"></span>
+        </p>
+
+        <p class="feedback-score">
+          Confidence Score:
+          <span id="confidenceScore"></span>
+        </p>
+
+        <div class="section-card">
+          <h3>Transcribed Answer</h3>
+          <p id="transcribedAnswer"></p>
+        </div>
+
+        <div class="section-card">
+          <h3>Missing Points</h3>
+          <ul id="missingPoints"></ul>
+        </div>
+
+        <div class="bullet-card">
+          <h3>Improved Answer</h3>
+          <p id="improvedAnswer"></p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+let mediaRecorder;
+let audioChunks = [];
+
+async function analyzeResume() {
+  const resume = document.getElementById("resume").files[0];
+  const jobDescription = document.getElementById("job_description").value;
+
+  if (!resume) {
+    alert("Please upload your resume.");
+    return;
+  }
+
+  if (!jobDescription.trim()) {
+    alert("Please paste the job description.");
+    return;
+  }
+
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("result").style.display = "none";
+
+  const formData = new FormData();
+  formData.append("resume", resume);
+  formData.append("job_description", jobDescription);
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/analyze-resume", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    document.getElementById("loading").style.display = "none";
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("matchScore").innerText = data.match_score + "%";
+
+    showList("matchedSkills", data.matched_skills);
+    showList("missingSkills", data.missing_skills);
+    showList("strongKeywords", data.strong_keywords);
+    showList("weakSections", data.weak_sections);
+
+    showList("education", data.education);
+    showList("experience", data.experience);
+    showList("projects", data.projects);
+    showList("certifications", data.certifications);
+
+    document.getElementById("improvedSummary").innerText = data.improved_summary;
+
+    showList("betterProjects", data.better_project_descriptions);
+    showList("roleKeywords", data.role_keywords);
+    showList("resumeSuggestions", data.resume_suggestions);
+    showList("resumeBullets", data.resume_bullets);
+    showList("hrQuestions", data.hr_questions);
+    showList("technicalQuestions", data.technical_questions);
+    showList("behavioralQuestions", data.behavioral_questions);
+
+    showStarAnswers(data.star_answers);
+
+  } catch (error) {
+    document.getElementById("loading").style.display = "none";
+    alert("Something went wrong. Make sure Flask backend is running.");
+  }
+}
+
+
+function showList(elementId, items) {
+  const list = document.getElementById(elementId);
+  list.innerHTML = "";
+
+  if (!items || items.length === 0) {
+    list.innerHTML = "<li>None found</li>";
+    return;
+  }
+
+  items.forEach(item => {
+    const li = document.createElement("li");
+    li.innerText = item;
+    list.appendChild(li);
+  });
+}
+
+
+function showStarAnswers(starAnswers) {
+  const container = document.getElementById("starAnswers");
+  container.innerHTML = "";
+
+  if (!starAnswers || starAnswers.length === 0) {
+    container.innerHTML = "<p>None found</p>";
+    return;
+  }
+
+  starAnswers.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "star-box";
+
+    div.innerHTML = `
+      <h4>${item.question}</h4>
+      <p><b>Situation:</b> ${item.answer.situation}</p>
+      <p><b>Task:</b> ${item.answer.task}</p>
+      <p><b>Action:</b> ${item.answer.action}</p>
+      <p><b>Result:</b> ${item.answer.result}</p>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+
+async function getMockFeedback() {
+  const answer = document.getElementById("mockAnswer").value;
+
+  if (!answer.trim()) {
+    alert("Please type your interview answer.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/mock-feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        answer: answer
+      })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("mockFeedbackResult").style.display = "block";
+
+    document.getElementById("clarityScore").innerText = data.clarity_score + "/100";
+    document.getElementById("confidenceScore").innerText = data.confidence_score + "/100";
+    document.getElementById("transcribedAnswer").innerText = answer;
+
+    showList("missingPoints", data.missing_points);
+
+    document.getElementById("improvedAnswer").innerText = data.improved_answer;
+
+  } catch (error) {
+    alert("Unable to analyze answer.");
+  }
+}
+
+
+async function startRecording() {
+  audioChunks = [];
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+
+    document.getElementById("recordingStatus").style.display = "block";
+
+    mediaRecorder.ondataavailable = event => {
+      audioChunks.push(event.data);
+    };
+
+  } catch (error) {
+    alert("Microphone permission denied or not available.");
+  }
+}
+
+
+async function stopRecording() {
+  if (!mediaRecorder) {
+    alert("Please start recording first.");
+    return;
+  }
+
+  mediaRecorder.stop();
+
+  document.getElementById("recordingStatus").style.display = "none";
+
+  mediaRecorder.onstop = async () => {
+    const audioBlob = new Blob(audioChunks, {
+      type: "audio/webm"
+    });
+
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "answer.webm");
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/voice-feedback", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      document.getElementById("mockFeedbackResult").style.display = "block";
+
+      document.getElementById("clarityScore").innerText = data.clarity_score + "/100";
+      document.getElementById("confidenceScore").innerText = data.confidence_score + "/100";
+
+      document.getElementById("transcribedAnswer").innerText = data.transcribed_text;
+      document.getElementById("mockAnswer").value = data.transcribed_text;
+
+      showList("missingPoints", data.missing_points);
+
+      document.getElementById("improvedAnswer").innerText = data.improved_answer;
+
+    } catch (error) {
+      alert("Voice analysis failed.");
+    }
+  };
+}
+
+
+function downloadReport() {
+  const reportContent = document.getElementById("reportContent").innerHTML;
+
+  const reportWindow = window.open("", "", "width=1000,height=800");
+
+  reportWindow.document.write(`
+    <html>
+      <head>
+        <title>Resume Analysis Report</title>
+
+        <style>
+          body {
+            font-family: Arial;
+            padding: 30px;
+            color: #222;
+          }
+
+          h1, h2, h3 {
+            color: #1f3c88;
+          }
+
+          .score {
+            font-size: 40px;
+            font-weight: bold;
+          }
+
+          ul {
+            padding-left: 20px;
+          }
+
+          li {
+            margin-bottom: 8px;
+          }
+        </style>
+      </head>
+
+      <body>
+        <h1>AI Resume Analysis Report</h1>
+        ${reportContent}
+      </body>
+    </html>
+  `);
+
+  reportWindow.document.close();
+  reportWindow.print();
+}
+</script>
+
+</body>
+</html>
