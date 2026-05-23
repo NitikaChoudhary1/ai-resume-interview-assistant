@@ -7,3 +7,6 @@ SpeechRecognition
 pydub
 openai
 python-dotenv
+flask-jwt-extended
+pymongo
+bcrypt
