@@ -1,200 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Resume + Interview Assistant</title>
 
   <style>
-    body {
-      margin: 0;
+
+    body{
       font-family: Arial, sans-serif;
-      background: #f4f6f9;
-      color: #222;
+      background:#f4f7fb;
+      margin:0;
+      padding:30px;
+      color:#222;
     }
 
-    .container {
-      max-width: 1150px;
-      margin: 40px auto;
-      background: white;
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    .container{
+      max-width:1200px;
+      margin:auto;
+      background:white;
+      padding:30px;
+      border-radius:12px;
+      box-shadow:0 0 15px rgba(0,0,0,0.1);
     }
 
-    h1 {
-      text-align: center;
-      color: #1f3c88;
+    h1{
+      text-align:center;
+      color:#0b2c6b;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
+    h2{
+      color:#0b2c6b;
     }
 
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 18px;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:30px;
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 15px;
-      box-sizing: border-box;
+    input,
+    textarea,
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      margin-bottom:15px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:15px;
+      box-sizing:border-box;
     }
 
-    button {
-      margin-top: 18px;
-      width: 100%;
-      padding: 14px;
-      background: #1f3c88;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
+    textarea{
+      min-height:180px;
     }
 
-    button:hover {
-      opacity: 0.9;
+    button{
+      border:none;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
     }
 
-    .auth-box {
-      background: #eef3ff;
-      padding: 20px;
-      border-radius: 14px;
-      margin-bottom: 25px;
-      border: 1px solid #c8d6ff;
+    .blue{ background:#001f66; }
+    .green{ background:#006b2f; }
+    .red{ background:#8b0000; }
+    .orange{ background:#b85c00; }
+    .purple{ background:#4b0082; }
+
+    .section{
+      margin-top:30px;
+      padding:20px;
+      border-radius:10px;
+      border:1px solid #ddd;
+      background:#fafafa;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+    pre{
+      white-space:pre-wrap;
+      background:#eee;
+      padding:15px;
+      border-radius:8px;
+      overflow:auto;
     }
 
-    .card, .section-card, .bullet-card, .mock-card {
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      margin-top: 20px;
+    #questionBox{
+      background:#fff6d8;
+      padding:15px;
+      border-radius:8px;
+      margin-top:15px;
+      border:1px solid #e3c86f;
     }
 
-    .card {
-      background: #fafafa;
+    #evaluationBox{
+      background:#e8fff0;
+      padding:15px;
+      border-radius:8px;
+      margin-top:15px;
+      border:1px solid #5dbb7a;
     }
 
-    .section-card {
-      background: #fff8e6;
-      border-color: #f1d48a;
-    }
-
-    .bullet-card {
-      background: #eefaf1;
-      border-color: #b8e6c2;
-    }
-
-    .mock-card {
-      background: #f7edff;
-      border-color: #d7b8ef;
-    }
-
-    .score-card {
-      background: #eef3ff;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .score {
-      font-size: 42px;
-      color: #1f3c88;
-      font-weight: bold;
-    }
-
-    .download-btn, .history-btn {
-      background: #0f7b4f;
-    }
-
-    .logout-btn, .record-btn {
-      background: #c62828;
-    }
-
-    .mock-btn {
-      background: #7b1fa2;
-    }
-
-    .stop-btn {
-      background: #ef6c00;
-    }
-
-    .speak-btn {
-      background: #00695c;
-    }
-
-    .loading, .recording-status {
-      display: none;
-      margin-top: 20px;
-      text-align: center;
-      font-weight: bold;
-      color: #1f3c88;
-    }
-
-    .recording-status {
-      color: #c62828;
-    }
-
-    .result {
-      display: none;
-      margin-top: 30px;
-    }
-
-    .user-status {
-      text-align: center;
-      font-weight: bold;
-      color: #0f7b4f;
-      margin-bottom: 15px;
-    }
-
-    h3 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      background: #f8f8f8;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      line-height: 1.5;
-      overflow-x: auto;
-    }
-
-    @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .container {
-        margin: 20px;
-        padding: 25px;
-      }
-    }
   </style>
 </head>
 
@@ -204,791 +110,533 @@
 
   <h1>AI Resume + Interview Assistant</h1>
 
-  <p class="subtitle">
-    GPT-powered resume analysis, ATS scoring, saved reports, voice mock interview, and AI interview evaluation.
+  <p style="text-align:center;">
+    GPT-powered resume analysis, ATS scoring, AI voice interview, login system, and interview history.
   </p>
 
-  <div class="auth-box">
-    <div class="user-status" id="userStatus">Not logged in</div>
+  <div class="grid">
 
-    <div class="grid">
-      <div>
-        <h3>Signup</h3>
+    <!-- SIGNUP -->
 
-        <label>Name</label>
-        <input type="text" id="signupName" placeholder="Enter name">
+    <div class="section">
 
-        <label>Email</label>
-        <input type="email" id="signupEmail" placeholder="Enter email">
+      <h2>Signup</h2>
 
-        <label>Password</label>
-        <input type="password" id="signupPassword" placeholder="Enter password">
+      <input type="text" id="signupName" placeholder="Enter name">
 
-        <button onclick="signup()">Signup</button>
-      </div>
+      <input type="email" id="signupEmail" placeholder="Enter email">
 
-      <div>
-        <h3>Login</h3>
+      <input type="password" id="signupPassword" placeholder="Enter password">
 
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="Enter email">
-
-        <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="Enter password">
-
-        <button onclick="login()">Login</button>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-        <button class="history-btn" onclick="loadReports()">View Saved Reports</button>
-        <button class="history-btn" onclick="loadInterviewHistory()">View Interview History</button>
-      </div>
-    </div>
-  </div>
-
-  <label>Upload Resume (PDF or DOCX)</label>
-  <input type="file" id="resume" accept=".pdf,.docx">
-
-  <label>Paste Job Description</label>
-  <textarea id="job_description" rows="10" placeholder="Paste the job description here..."></textarea>
-
-  <button onclick="analyzeResume()">Analyze Resume</button>
-
-  <div class="loading" id="loading">
-    Analyzing resume with GPT... Please wait.
-  </div>
-
-  <div class="result" id="result">
-
-    <div id="reportContent">
-
-      <div class="score-card">
-        <h2>ATS Match Score</h2>
-        <div class="score" id="atsScore"></div>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <h3>Resume Skills</h3>
-          <ul id="resumeSkills"></ul>
-        </div>
-
-        <div class="card">
-          <h3>Job Description Skills</h3>
-          <ul id="jobSkills"></ul>
-        </div>
-
-        <div class="card">
-          <h3>Matched Skills</h3>
-          <ul id="matchedSkills"></ul>
-        </div>
-
-        <div class="card">
-          <h3>Missing Skills</h3>
-          <ul id="missingSkills"></ul>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <h3>GPT Improved Professional Summary</h3>
-        <pre id="improvedSummary"></pre>
-      </div>
-
-      <div class="bullet-card">
-        <h3>GPT Better Project Descriptions</h3>
-        <pre id="betterProjects"></pre>
-      </div>
-
-      <div class="section-card">
-        <h3>GPT Role-Specific Keywords</h3>
-        <pre id="roleKeywords"></pre>
-      </div>
-
-      <div class="section-card">
-        <h3>GPT Interview Questions + STAR Answers</h3>
-        <pre id="interviewQuestions"></pre>
-      </div>
-
-      <div class="section-card">
-        <h3>Resume Preview</h3>
-        <pre id="resumePreview"></pre>
-      </div>
+      <button class="blue" onclick="signup()">Signup</button>
 
     </div>
 
-    <button class="download-btn" onclick="downloadReport()">Download Report</button>
+    <!-- LOGIN -->
 
-    <div class="mock-card">
-      <h3>Mock Interview Feedback</h3>
+    <div class="section">
 
-      <label>Type Your Interview Answer</label>
-      <textarea id="mockAnswer" rows="8" placeholder="Type your interview answer here..."></textarea>
+      <h2>Login</h2>
 
-      <button class="mock-btn" onclick="analyzeTypedAnswer()">Analyze Typed Answer</button>
+      <input type="email" id="loginEmail" placeholder="Enter email">
 
-      <button class="record-btn" onclick="startRecording()">Start Voice Recording</button>
+      <input type="password" id="loginPassword" placeholder="Enter password">
 
-      <button class="stop-btn" onclick="stopRecording()">Stop Recording & Analyze</button>
+      <button class="green" onclick="login()">Login</button>
 
-      <div class="recording-status" id="recordingStatus">
-        Recording... speak your answer now.
-      </div>
+      <button class="orange" onclick="forgotPassword()">Forgot Password</button>
 
-      <div id="mockFeedbackResult" style="display:none; margin-top:20px;">
-        <div class="section-card">
-          <h3>Transcribed / Typed Answer</h3>
-          <pre id="transcribedAnswer"></pre>
-        </div>
+      <button class="red" onclick="logout()">Logout</button>
 
-        <div class="bullet-card">
-          <h3>GPT Feedback</h3>
-          <pre id="feedbackOutput"></pre>
-        </div>
-      </div>
-    </div>
+      <button class="purple" onclick="loadReports()">View Saved Reports</button>
 
-    <div class="mock-card">
-      <h3>AI Voice Interview</h3>
+      <h3 id="loginStatus">Not logged in</h3>
 
-      <p>
-        Click generate question. The system will speak the question.
-        Then record your answer using your voice.
-      </p>
-
-      <button onclick="generateInterviewQuestion()">Generate Interview Question</button>
-
-      <div class="section-card">
-        <h3>System Interview Question</h3>
-        <pre id="voiceInterviewQuestion">No question generated yet.</pre>
-      </div>
-
-      <button class="speak-btn" onclick="speakInterviewQuestion()">Speak Question Again</button>
-
-      <button class="record-btn" onclick="startInterviewRecording()">Start Candidate Voice Answer</button>
-
-      <button class="stop-btn" onclick="stopInterviewRecording()">Stop & Evaluate Interview Answer</button>
-
-      <div class="recording-status" id="interviewRecordingStatus">
-        Recording candidate answer... speak now.
-      </div>
-
-      <div id="voiceInterviewResult" style="display:none;">
-        <div class="section-card">
-          <h3>Candidate Transcript</h3>
-          <pre id="candidateTranscript"></pre>
-        </div>
-
-        <div class="bullet-card">
-          <h3>AI Interview Evaluation</h3>
-          <pre id="interviewEvaluation"></pre>
-        </div>
-      </div>
     </div>
 
   </div>
 
-  <div class="section-card" id="savedReportsBox" style="display:none;">
-    <h3>Saved Reports</h3>
+  <!-- RESUME ANALYSIS -->
+
+  <div class="section">
+
+    <h2>Resume Analysis</h2>
+
+    <input type="file" id="resumeFile">
+
+    <textarea id="jobDescription" placeholder="Paste Job Description"></textarea>
+
+    <button class="blue" onclick="analyzeResume()">Analyze Resume</button>
+
+  </div>
+
+  <!-- RESULTS -->
+
+  <div class="section">
+
+    <h2>ATS Score</h2>
+
+    <div id="atsScore"></div>
+
+  </div>
+
+  <div class="section">
+
+    <h2>Matched Skills</h2>
+
+    <pre id="matchedSkills"></pre>
+
+  </div>
+
+  <div class="section">
+
+    <h2>Missing Skills</h2>
+
+    <pre id="missingSkills"></pre>
+
+  </div>
+
+  <div class="section">
+
+    <h2>GPT Professional Summary</h2>
+
+    <pre id="summary"></pre>
+
+  </div>
+
+  <div class="section">
+
+    <h2>Improved Project Descriptions</h2>
+
+    <pre id="projects"></pre>
+
+  </div>
+
+  <div class="section">
+
+    <h2>ATS Keywords</h2>
+
+    <pre id="keywords"></pre>
+
+  </div>
+
+  <div class="section">
+
+    <h2>Interview Questions</h2>
+
+    <pre id="interviewQuestions"></pre>
+
+  </div>
+
+  <!-- AI VOICE INTERVIEW -->
+
+  <div class="section">
+
+    <h2>AI Voice Interview</h2>
+
+    <p>
+      Generate question → System speaks → Candidate answers by voice → AI evaluates.
+    </p>
+
+    <button class="blue" onclick="generateQuestion()">
+      Generate Interview Question
+    </button>
+
+    <div id="questionBox">
+      No question generated yet.
+    </div>
+
+    <button class="green" onclick="speakQuestion()">
+      Speak Question
+    </button>
+
+    <button class="red" onclick="startRecording()">
+      Start Candidate Voice Answer
+    </button>
+
+    <button class="orange" onclick="stopRecording()">
+      Stop & Evaluate Interview Answer
+    </button>
+
+    <div id="evaluationBox">
+      Interview evaluation will appear here.
+    </div>
+
+  </div>
+
+  <!-- SAVED REPORTS -->
+
+  <div class="section">
+
+    <h2>Saved Reports</h2>
+
     <div id="savedReports"></div>
-  </div>
 
-  <div class="section-card" id="interviewHistoryBox" style="display:none;">
-    <h3>Saved Interview History</h3>
-    <div id="interviewHistory"></div>
   </div>
 
 </div>
 
 <script>
+
+let token = localStorage.getItem("token") || "";
+
 let mediaRecorder;
 let audioChunks = [];
 
-let interviewRecorder;
-let interviewAudioChunks = [];
+let currentQuestion = "";
 
-let latestResumeSkills = [];
-let latestJobDescription = "";
-let currentInterviewQuestion = "";
-
-window.onload = function () {
-  updateUserStatus();
-};
-
-function updateUserStatus() {
-  const token = localStorage.getItem("token");
-  const name = localStorage.getItem("name");
-
-  if (token && name) {
-    document.getElementById("userStatus").innerText = "Logged in as " + name;
-  } else {
-    document.getElementById("userStatus").innerText = "Not logged in";
-  }
+function updateLoginStatus(name){
+  document.getElementById("loginStatus").innerText =
+    name ? `Logged in as ${name}` : "Not logged in";
 }
 
-async function signup() {
+async function signup(){
+
   const name = document.getElementById("signupName").value;
   const email = document.getElementById("signupEmail").value;
   const password = document.getElementById("signupPassword").value;
 
-  if (!name || !email || !password) {
-    alert("Please fill all signup fields.");
-    return;
-  }
+  const response = await fetch("/signup",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      name,
+      email,
+      password
+    })
+  });
 
-  try {
-    const response = await fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password
-      })
-    });
+  const data = await response.json();
 
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-
-    alert("Signup successful. Please login now.");
-
-  } catch (error) {
-    alert("Signup failed.");
+  if(data.error){
+    alert(data.error);
+  }else{
+    alert(data.message);
   }
 }
 
-async function login() {
+async function login(){
+
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
-  if (!email || !password) {
-    alert("Please enter email and password.");
+  const response = await fetch("/login",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      email,
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  if(data.error){
+    alert(data.error);
     return;
   }
 
-  try {
-    const response = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    });
+  token = data.token;
 
-    const data = await response.json();
+  localStorage.setItem("token", token);
 
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
+  updateLoginStatus(data.name);
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("name", data.name);
-    localStorage.setItem("email", data.email);
-
-    updateUserStatus();
-
-    alert("Login successful.");
-
-  } catch (error) {
-    alert("Login failed.");
-  }
+  alert("Login successful");
 }
 
-function logout() {
+function logout(){
+
   localStorage.removeItem("token");
-  localStorage.removeItem("name");
-  localStorage.removeItem("email");
 
-  updateUserStatus();
+  token = "";
 
-  alert("Logged out.");
+  updateLoginStatus("");
+
+  alert("Logged out");
 }
 
-async function analyzeResume() {
-  const resume = document.getElementById("resume").files[0];
-  const jobDescription = document.getElementById("job_description").value;
+async function forgotPassword(){
 
-  if (!resume) {
-    alert("Please upload your resume.");
+  const email = document.getElementById("loginEmail").value;
+
+  const newPassword = prompt("Enter new password");
+
+  if(!email || !newPassword){
+    alert("Email and password required");
     return;
   }
 
-  if (!jobDescription.trim()) {
-    alert("Please paste the job description.");
+  const response = await fetch("/forgot-password",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      email,
+      new_password:newPassword
+    })
+  });
+
+  const data = await response.json();
+
+  if(data.error){
+    alert(data.error);
+  }else{
+    alert(data.message);
+  }
+}
+
+async function analyzeResume(){
+
+  const file = document.getElementById("resumeFile").files[0];
+
+  const jobDescription =
+    document.getElementById("jobDescription").value;
+
+  if(!file){
+    alert("Upload resume");
     return;
   }
-
-  latestJobDescription = jobDescription;
-
-  document.getElementById("loading").style.display = "block";
-  document.getElementById("result").style.display = "none";
 
   const formData = new FormData();
-  formData.append("resume", resume);
+
+  formData.append("resume", file);
   formData.append("job_description", jobDescription);
 
-  const token = localStorage.getItem("token");
-  const headers = {};
-
-  if (token) {
-    headers["Authorization"] = "Bearer " + token;
-  }
-
-  try {
-    const response = await fetch("/analyze-resume", {
-      method: "POST",
-      headers: headers,
-      body: formData
-    });
-
-    const data = await response.json();
-
-    document.getElementById("loading").style.display = "none";
-
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-
-    document.getElementById("result").style.display = "block";
-
-    latestResumeSkills = data.resume_skills || [];
-
-    document.getElementById("atsScore").innerText = data.ats_score + "%";
-
-    showList("resumeSkills", data.resume_skills);
-    showList("jobSkills", data.job_description_skills);
-    showList("matchedSkills", data.matched_skills);
-    showList("missingSkills", data.missing_skills);
-
-    document.getElementById("improvedSummary").innerText = data.improved_summary;
-    document.getElementById("betterProjects").innerText = data.better_project_descriptions;
-    document.getElementById("roleKeywords").innerText = data.role_keywords;
-    document.getElementById("interviewQuestions").innerText = data.interview_questions;
-    document.getElementById("resumePreview").innerText = data.resume_preview;
-
-  } catch (error) {
-    document.getElementById("loading").style.display = "none";
-    alert("Something went wrong. Make sure backend is running.");
-  }
-}
-
-function showList(elementId, items) {
-  const list = document.getElementById(elementId);
-  list.innerHTML = "";
-
-  if (!items || items.length === 0) {
-    list.innerHTML = "<li>None found</li>";
-    return;
-  }
-
-  items.forEach(item => {
-    const li = document.createElement("li");
-    li.innerText = item;
-    list.appendChild(li);
+  const response = await fetch("/analyze-resume",{
+    method:"POST",
+    headers:{
+      "Authorization":"Bearer " + token
+    },
+    body:formData
   });
-}
 
-async function loadReports() {
-  const token = localStorage.getItem("token");
+  const data = await response.json();
 
-  if (!token) {
-    alert("Please login first.");
+  if(data.error){
+    alert(data.error);
     return;
   }
 
-  try {
-    const response = await fetch("/reports", {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    });
+  document.getElementById("atsScore").innerHTML =
+    `<h1>${data.ats_score}%</h1>`;
 
-    const data = await response.json();
+  document.getElementById("matchedSkills").innerText =
+    data.matched_skills.join(", ");
 
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
+  document.getElementById("missingSkills").innerText =
+    data.missing_skills.join(", ");
 
-    const savedReportsBox = document.getElementById("savedReportsBox");
-    const savedReports = document.getElementById("savedReports");
+  document.getElementById("summary").innerText =
+    data.improved_summary;
 
-    savedReportsBox.style.display = "block";
-    savedReports.innerHTML = "";
+  document.getElementById("projects").innerText =
+    data.better_project_descriptions;
 
-    if (!data.reports || data.reports.length === 0) {
-      savedReports.innerHTML = "<p>No saved reports found.</p>";
-      return;
-    }
+  document.getElementById("keywords").innerText =
+    data.role_keywords;
 
-    data.reports.forEach((report, index) => {
-      const div = document.createElement("div");
-      div.className = "card";
-
-      div.innerHTML = `
-        <h3>Report ${index + 1}</h3>
-        <p><b>ATS Score:</b> ${report.result.ats_score}%</p>
-        <p><b>Matched Skills:</b> ${report.result.matched_skills.join(", ")}</p>
-        <p><b>Missing Skills:</b> ${report.result.missing_skills.join(", ")}</p>
-        <pre>${report.result.improved_summary}</pre>
-      `;
-
-      savedReports.appendChild(div);
-    });
-
-  } catch (error) {
-    alert("Could not load reports.");
-  }
+  document.getElementById("interviewQuestions").innerText =
+    data.interview_questions;
 }
 
-async function loadInterviewHistory() {
-  const token = localStorage.getItem("token");
+async function generateQuestion(){
 
-  if (!token) {
-    alert("Please login first.");
+  const jobDescription =
+    document.getElementById("jobDescription").value;
+
+  const response = await fetch("/generate-interview-question",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      job_description:jobDescription,
+      resume_skills:[]
+    })
+  });
+
+  const data = await response.json();
+
+  currentQuestion = data.question;
+
+  document.getElementById("questionBox").innerText =
+    currentQuestion;
+}
+
+function speakQuestion(){
+
+  if(!currentQuestion){
+    alert("Generate question first");
     return;
   }
 
-  try {
-    const response = await fetch("/interview-history", {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    });
+  const speech = new SpeechSynthesisUtterance(currentQuestion);
 
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-
-    const box = document.getElementById("interviewHistoryBox");
-    const container = document.getElementById("interviewHistory");
-
-    box.style.display = "block";
-    container.innerHTML = "";
-
-    if (!data.interviews || data.interviews.length === 0) {
-      container.innerHTML = "<p>No interview history found.</p>";
-      return;
-    }
-
-    data.interviews.forEach((item, index) => {
-      const div = document.createElement("div");
-      div.className = "card";
-
-      div.innerHTML = `
-        <h3>Interview ${index + 1}</h3>
-
-        <p><b>Question:</b></p>
-        <pre>${item.question}</pre>
-
-        <p><b>Candidate Transcript:</b></p>
-        <pre>${item.transcript}</pre>
-
-        <p><b>AI Evaluation:</b></p>
-        <pre>${item.evaluation}</pre>
-      `;
-
-      container.appendChild(div);
-    });
-
-  } catch (error) {
-    alert("Could not load interview history.");
-  }
-}
-
-async function analyzeTypedAnswer() {
-  const answer = document.getElementById("mockAnswer").value;
-
-  if (!answer.trim()) {
-    alert("Please type your interview answer.");
-    return;
-  }
-
-  try {
-    const response = await fetch("/analyze-answer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        answer: answer
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-
-    document.getElementById("mockFeedbackResult").style.display = "block";
-    document.getElementById("transcribedAnswer").innerText = answer;
-    document.getElementById("feedbackOutput").innerText = data.feedback;
-
-  } catch (error) {
-    alert("Unable to analyze answer.");
-  }
-}
-
-async function startRecording() {
-  audioChunks = [];
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
-
-    document.getElementById("recordingStatus").style.display = "block";
-
-    mediaRecorder.ondataavailable = event => {
-      audioChunks.push(event.data);
-    };
-
-  } catch (error) {
-    alert("Microphone permission denied or not available.");
-  }
-}
-
-async function stopRecording() {
-  if (!mediaRecorder) {
-    alert("Please start recording first.");
-    return;
-  }
-
-  mediaRecorder.stop();
-  document.getElementById("recordingStatus").style.display = "none";
-
-  mediaRecorder.onstop = async () => {
-    const audioBlob = new Blob(audioChunks, {
-      type: "audio/webm"
-    });
-
-    const formData = new FormData();
-    formData.append("audio", audioBlob, "answer.webm");
-
-    try {
-      const response = await fetch("/analyze-voice", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-
-      document.getElementById("mockFeedbackResult").style.display = "block";
-      document.getElementById("transcribedAnswer").innerText = data.transcript;
-      document.getElementById("mockAnswer").value = data.transcript;
-      document.getElementById("feedbackOutput").innerText = data.feedback;
-
-    } catch (error) {
-      alert("Voice analysis failed.");
-    }
-  };
-}
-
-async function generateInterviewQuestion() {
-  if (!latestJobDescription.trim()) {
-    latestJobDescription = document.getElementById("job_description").value;
-  }
-
-  if (!latestJobDescription.trim()) {
-    alert("Please paste job description first.");
-    return;
-  }
-
-  try {
-    const response = await fetch("/generate-interview-question", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        job_description: latestJobDescription,
-        resume_skills: latestResumeSkills
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-
-    currentInterviewQuestion = data.question;
-
-    document.getElementById("voiceInterviewQuestion").innerText = currentInterviewQuestion;
-
-    speakText(currentInterviewQuestion);
-
-  } catch (error) {
-    alert("Could not generate interview question.");
-  }
-}
-
-function speakInterviewQuestion() {
-  if (!currentInterviewQuestion) {
-    alert("Please generate a question first.");
-    return;
-  }
-
-  speakText(currentInterviewQuestion);
-}
-
-function speakText(text) {
-  window.speechSynthesis.cancel();
-
-  const speech = new SpeechSynthesisUtterance(text);
   speech.lang = "en-US";
-  speech.rate = 0.9;
-  speech.pitch = 1;
 
   window.speechSynthesis.speak(speech);
 }
 
-async function startInterviewRecording() {
-  interviewAudioChunks = [];
+async function startRecording(){
 
-  if (!currentInterviewQuestion) {
-    alert("Please generate an interview question first.");
-    return;
-  }
+  audioChunks = [];
 
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true
+  const stream =
+    await navigator.mediaDevices.getUserMedia({
+      audio:true
     });
 
-    interviewRecorder = new MediaRecorder(stream);
-    interviewRecorder.start();
+  mediaRecorder = new MediaRecorder(stream);
 
-    document.getElementById("interviewRecordingStatus").style.display = "block";
+  mediaRecorder.start();
 
-    interviewRecorder.ondataavailable = event => {
-      interviewAudioChunks.push(event.data);
-    };
+  mediaRecorder.ondataavailable = event=>{
+    audioChunks.push(event.data);
+  };
 
-  } catch (error) {
-    alert("Microphone permission denied or not available.");
-  }
+  alert("Recording started");
 }
 
-async function stopInterviewRecording() {
-  if (!interviewRecorder) {
-    alert("Please start candidate voice answer first.");
-    return;
-  }
+async function stopRecording(){
 
-  interviewRecorder.stop();
-  document.getElementById("interviewRecordingStatus").style.display = "none";
+  mediaRecorder.stop();
 
-  interviewRecorder.onstop = async () => {
-    const audioBlob = new Blob(interviewAudioChunks, {
-      type: "audio/webm"
-    });
+  mediaRecorder.onstop = async ()=>{
+
+    const audioBlob =
+      new Blob(audioChunks,{type:"audio/webm"});
 
     const formData = new FormData();
-    formData.append("audio", audioBlob, "interview_answer.webm");
-    formData.append("question", currentInterviewQuestion);
-    formData.append("job_description", latestJobDescription);
 
-    try {
-      const token = localStorage.getItem("token");
-      const headers = {};
+    formData.append("audio", audioBlob);
 
-      if (token) {
-        headers["Authorization"] = "Bearer " + token;
-      }
+    formData.append("question", currentQuestion);
 
-      const response = await fetch("/voice-interview-evaluate", {
-        method: "POST",
-        headers: headers,
-        body: formData
-      });
+    formData.append(
+      "job_description",
+      document.getElementById("jobDescription").value
+    );
+
+    try{
+
+      const response =
+        await fetch("/voice-interview-evaluate",{
+          method:"POST",
+          headers:{
+            "Authorization":"Bearer " + token
+          },
+          body:formData
+        });
 
       const data = await response.json();
 
-      if (data.error) {
+      if(data.error){
         alert(data.error);
         return;
       }
 
-      document.getElementById("voiceInterviewResult").style.display = "block";
-      document.getElementById("candidateTranscript").innerText = data.transcript;
-      document.getElementById("interviewEvaluation").innerText = data.evaluation;
+      document.getElementById("evaluationBox").innerHTML =
+        `
+        <h3>Candidate Transcript</h3>
+        <pre>${data.transcript}</pre>
 
-      if (data.saved_to_database) {
-        alert("Interview evaluation saved to history.");
-      }
+        <h3>AI Evaluation</h3>
+        <pre>${data.evaluation}</pre>
+        `;
 
-    } catch (error) {
+    }catch(error){
+
       alert("Interview evaluation failed.");
     }
   };
 }
 
-function downloadReport() {
-  const reportContent = document.getElementById("reportContent").innerHTML;
+async function loadReports(){
 
-  const reportWindow = window.open("", "", "width=1000,height=800");
+    const response = await fetch("/reports",{
+        headers:{
+            "Authorization":"Bearer " + token
+        }
+    });
 
-  reportWindow.document.write(`
-    <html>
-      <head>
-        <title>Resume Analysis Report</title>
-        <style>
-          body {
-            font-family: Arial;
-            padding: 30px;
-            color: #222;
-          }
+    const data = await response.json();
 
-          h1, h2, h3 {
-            color: #1f3c88;
-          }
+    if(data.error){
+        alert(data.error);
+        return;
+    }
 
-          pre {
-            white-space: pre-wrap;
-            line-height: 1.5;
-          }
+    let html = "";
 
-          li {
-            margin-bottom: 8px;
-          }
-        </style>
-      </head>
+    data.reports.forEach((report,index)=>{
 
-      <body>
-        <h1>AI Resume Analysis Report</h1>
-        ${reportContent}
-      </body>
-    </html>
-  `);
+        html += `
+        <div style="
+            background:white;
+            padding:20px;
+            margin-bottom:20px;
+            border-radius:12px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            border-left:8px solid #0b2c6b;
+        ">
 
-  reportWindow.document.close();
-  reportWindow.print();
+            <h2 style="color:#0b2c6b;">
+                Report ${index + 1}
+            </h2>
+
+            <p>
+                <strong>Date:</strong>
+                ${report.created_at || "N/A"}
+            </p>
+
+            <p>
+                <strong>ATS Score:</strong>
+                ${report.result?.ats_score || "N/A"}%
+            </p>
+
+            <h3>Matched Skills</h3>
+            <p>
+                ${(report.result?.matched_skills || []).join(", ")}
+            </p>
+
+            <h3>Missing Skills</h3>
+            <p>
+                ${(report.result?.missing_skills || []).join(", ")}
+            </p>
+
+            <h3>Professional Summary</h3>
+            <p>
+                ${report.result?.improved_summary || ""}
+            </p>
+
+            <h3>Better Project Descriptions</h3>
+            <p>
+                ${report.result?.better_project_descriptions || ""}
+            </p>
+
+            <h3>Interview Questions</h3>
+            <pre style="
+                white-space:pre-wrap;
+                background:#f4f4f4;
+                padding:10px;
+                border-radius:8px;
+            ">
+${report.result?.interview_questions || ""}
+            </pre>
+
+        </div>
+        `;
+    });
+
+    document.getElementById("savedReports").innerHTML = html;
 }
+
 </script>
 
 </body>
