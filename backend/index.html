@@ -12,7 +12,7 @@
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1150px;
       margin: 40px auto;
       background: white;
       padding: 35px;
@@ -34,7 +34,7 @@
     label {
       font-weight: bold;
       display: block;
-      margin-top: 20px;
+      margin-top: 18px;
     }
 
     input, textarea {
@@ -48,66 +48,27 @@
     }
 
     button {
-      margin-top: 25px;
+      margin-top: 18px;
       width: 100%;
       padding: 14px;
       background: #1f3c88;
       color: white;
       border: none;
       border-radius: 10px;
-      font-size: 17px;
+      font-size: 16px;
       cursor: pointer;
     }
 
     button:hover {
-      background: #162d66;
+      opacity: 0.9;
     }
 
-    .download-btn {
-      background: #0f7b4f;
-    }
-
-    .mock-btn {
-      background: #7b1fa2;
-    }
-
-    .record-btn {
-      background: #c62828;
-    }
-
-    .stop-btn {
-      background: #ef6c00;
-    }
-
-    .loading, .recording-status {
-      display: none;
-      margin-top: 20px;
-      text-align: center;
-      font-weight: bold;
-      color: #1f3c88;
-    }
-
-    .recording-status {
-      color: #c62828;
-    }
-
-    .result {
-      display: none;
-      margin-top: 30px;
-    }
-
-    .score-card {
+    .auth-box {
       background: #eef3ff;
       padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .score {
-      font-size: 42px;
-      color: #1f3c88;
-      font-weight: bold;
+      border-radius: 14px;
+      margin-bottom: 25px;
+      border: 1px solid #c8d6ff;
     }
 
     .grid {
@@ -142,6 +103,64 @@
       border-color: #d7b8ef;
     }
 
+    .score-card {
+      background: #eef3ff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .score {
+      font-size: 42px;
+      color: #1f3c88;
+      font-weight: bold;
+    }
+
+    .download-btn, .history-btn {
+      background: #0f7b4f;
+    }
+
+    .logout-btn, .record-btn {
+      background: #c62828;
+    }
+
+    .mock-btn {
+      background: #7b1fa2;
+    }
+
+    .stop-btn {
+      background: #ef6c00;
+    }
+
+    .speak-btn {
+      background: #00695c;
+    }
+
+    .loading, .recording-status {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #1f3c88;
+    }
+
+    .recording-status {
+      color: #c62828;
+    }
+
+    .result {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .user-status {
+      text-align: center;
+      font-weight: bold;
+      color: #0f7b4f;
+      margin-bottom: 15px;
+    }
+
     h3 {
       margin-top: 0;
       color: #1f3c88;
@@ -163,6 +182,7 @@
       border-radius: 10px;
       border: 1px solid #ddd;
       line-height: 1.5;
+      overflow-x: auto;
     }
 
     @media (max-width: 700px) {
@@ -185,9 +205,44 @@
   <h1>AI Resume + Interview Assistant</h1>
 
   <p class="subtitle">
-    Upload your resume and paste a job description to get GPT-powered ATS analysis,
-    resume improvement, interview questions, and mock interview feedback.
+    GPT-powered resume analysis, ATS scoring, saved reports, voice mock interview, and AI interview evaluation.
   </p>
+
+  <div class="auth-box">
+    <div class="user-status" id="userStatus">Not logged in</div>
+
+    <div class="grid">
+      <div>
+        <h3>Signup</h3>
+
+        <label>Name</label>
+        <input type="text" id="signupName" placeholder="Enter name">
+
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="Enter email">
+
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="Enter password">
+
+        <button onclick="signup()">Signup</button>
+      </div>
+
+      <div>
+        <h3>Login</h3>
+
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter email">
+
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password">
+
+        <button onclick="login()">Login</button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="history-btn" onclick="loadReports()">View Saved Reports</button>
+        <button class="history-btn" onclick="loadInterviewHistory()">View Interview History</button>
+      </div>
+    </div>
+  </div>
 
   <label>Upload Resume (PDF or DOCX)</label>
   <input type="file" id="resume" accept=".pdf,.docx">
@@ -290,6 +345,54 @@
       </div>
     </div>
 
+    <div class="mock-card">
+      <h3>AI Voice Interview</h3>
+
+      <p>
+        Click generate question. The system will speak the question.
+        Then record your answer using your voice.
+      </p>
+
+      <button onclick="generateInterviewQuestion()">Generate Interview Question</button>
+
+      <div class="section-card">
+        <h3>System Interview Question</h3>
+        <pre id="voiceInterviewQuestion">No question generated yet.</pre>
+      </div>
+
+      <button class="speak-btn" onclick="speakInterviewQuestion()">Speak Question Again</button>
+
+      <button class="record-btn" onclick="startInterviewRecording()">Start Candidate Voice Answer</button>
+
+      <button class="stop-btn" onclick="stopInterviewRecording()">Stop & Evaluate Interview Answer</button>
+
+      <div class="recording-status" id="interviewRecordingStatus">
+        Recording candidate answer... speak now.
+      </div>
+
+      <div id="voiceInterviewResult" style="display:none;">
+        <div class="section-card">
+          <h3>Candidate Transcript</h3>
+          <pre id="candidateTranscript"></pre>
+        </div>
+
+        <div class="bullet-card">
+          <h3>AI Interview Evaluation</h3>
+          <pre id="interviewEvaluation"></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-card" id="savedReportsBox" style="display:none;">
+    <h3>Saved Reports</h3>
+    <div id="savedReports"></div>
+  </div>
+
+  <div class="section-card" id="interviewHistoryBox" style="display:none;">
+    <h3>Saved Interview History</h3>
+    <div id="interviewHistory"></div>
   </div>
 
 </div>
@@ -297,6 +400,116 @@
 <script>
 let mediaRecorder;
 let audioChunks = [];
+
+let interviewRecorder;
+let interviewAudioChunks = [];
+
+let latestResumeSkills = [];
+let latestJobDescription = "";
+let currentInterviewQuestion = "";
+
+window.onload = function () {
+  updateUserStatus();
+};
+
+function updateUserStatus() {
+  const token = localStorage.getItem("token");
+  const name = localStorage.getItem("name");
+
+  if (token && name) {
+    document.getElementById("userStatus").innerText = "Logged in as " + name;
+  } else {
+    document.getElementById("userStatus").innerText = "Not logged in";
+  }
+}
+
+async function signup() {
+  const name = document.getElementById("signupName").value;
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+
+  if (!name || !email || !password) {
+    alert("Please fill all signup fields.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    alert("Signup successful. Please login now.");
+
+  } catch (error) {
+    alert("Signup failed.");
+  }
+}
+
+async function login() {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) {
+    alert("Please enter email and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("name", data.name);
+    localStorage.setItem("email", data.email);
+
+    updateUserStatus();
+
+    alert("Login successful.");
+
+  } catch (error) {
+    alert("Login failed.");
+  }
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("name");
+  localStorage.removeItem("email");
+
+  updateUserStatus();
+
+  alert("Logged out.");
+}
 
 async function analyzeResume() {
   const resume = document.getElementById("resume").files[0];
@@ -312,6 +525,8 @@ async function analyzeResume() {
     return;
   }
 
+  latestJobDescription = jobDescription;
+
   document.getElementById("loading").style.display = "block";
   document.getElementById("result").style.display = "none";
 
@@ -319,9 +534,17 @@ async function analyzeResume() {
   formData.append("resume", resume);
   formData.append("job_description", jobDescription);
 
+  const token = localStorage.getItem("token");
+  const headers = {};
+
+  if (token) {
+    headers["Authorization"] = "Bearer " + token;
+  }
+
   try {
     const response = await fetch("/analyze-resume", {
       method: "POST",
+      headers: headers,
       body: formData
     });
 
@@ -335,6 +558,8 @@ async function analyzeResume() {
     }
 
     document.getElementById("result").style.display = "block";
+
+    latestResumeSkills = data.resume_skills || [];
 
     document.getElementById("atsScore").innerText = data.ats_score + "%";
 
@@ -369,6 +594,119 @@ function showList(elementId, items) {
     li.innerText = item;
     list.appendChild(li);
   });
+}
+
+async function loadReports() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/reports", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    const savedReportsBox = document.getElementById("savedReportsBox");
+    const savedReports = document.getElementById("savedReports");
+
+    savedReportsBox.style.display = "block";
+    savedReports.innerHTML = "";
+
+    if (!data.reports || data.reports.length === 0) {
+      savedReports.innerHTML = "<p>No saved reports found.</p>";
+      return;
+    }
+
+    data.reports.forEach((report, index) => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <h3>Report ${index + 1}</h3>
+        <p><b>ATS Score:</b> ${report.result.ats_score}%</p>
+        <p><b>Matched Skills:</b> ${report.result.matched_skills.join(", ")}</p>
+        <p><b>Missing Skills:</b> ${report.result.missing_skills.join(", ")}</p>
+        <pre>${report.result.improved_summary}</pre>
+      `;
+
+      savedReports.appendChild(div);
+    });
+
+  } catch (error) {
+    alert("Could not load reports.");
+  }
+}
+
+async function loadInterviewHistory() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/interview-history", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    const box = document.getElementById("interviewHistoryBox");
+    const container = document.getElementById("interviewHistory");
+
+    box.style.display = "block";
+    container.innerHTML = "";
+
+    if (!data.interviews || data.interviews.length === 0) {
+      container.innerHTML = "<p>No interview history found.</p>";
+      return;
+    }
+
+    data.interviews.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <h3>Interview ${index + 1}</h3>
+
+        <p><b>Question:</b></p>
+        <pre>${item.question}</pre>
+
+        <p><b>Candidate Transcript:</b></p>
+        <pre>${item.transcript}</pre>
+
+        <p><b>AI Evaluation:</b></p>
+        <pre>${item.evaluation}</pre>
+      `;
+
+      container.appendChild(div);
+    });
+
+  } catch (error) {
+    alert("Could not load interview history.");
+  }
 }
 
 async function analyzeTypedAnswer() {
@@ -465,6 +803,147 @@ async function stopRecording() {
 
     } catch (error) {
       alert("Voice analysis failed.");
+    }
+  };
+}
+
+async function generateInterviewQuestion() {
+  if (!latestJobDescription.trim()) {
+    latestJobDescription = document.getElementById("job_description").value;
+  }
+
+  if (!latestJobDescription.trim()) {
+    alert("Please paste job description first.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/generate-interview-question", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        job_description: latestJobDescription,
+        resume_skills: latestResumeSkills
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    currentInterviewQuestion = data.question;
+
+    document.getElementById("voiceInterviewQuestion").innerText = currentInterviewQuestion;
+
+    speakText(currentInterviewQuestion);
+
+  } catch (error) {
+    alert("Could not generate interview question.");
+  }
+}
+
+function speakInterviewQuestion() {
+  if (!currentInterviewQuestion) {
+    alert("Please generate a question first.");
+    return;
+  }
+
+  speakText(currentInterviewQuestion);
+}
+
+function speakText(text) {
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-US";
+  speech.rate = 0.9;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+
+async function startInterviewRecording() {
+  interviewAudioChunks = [];
+
+  if (!currentInterviewQuestion) {
+    alert("Please generate an interview question first.");
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    interviewRecorder = new MediaRecorder(stream);
+    interviewRecorder.start();
+
+    document.getElementById("interviewRecordingStatus").style.display = "block";
+
+    interviewRecorder.ondataavailable = event => {
+      interviewAudioChunks.push(event.data);
+    };
+
+  } catch (error) {
+    alert("Microphone permission denied or not available.");
+  }
+}
+
+async function stopInterviewRecording() {
+  if (!interviewRecorder) {
+    alert("Please start candidate voice answer first.");
+    return;
+  }
+
+  interviewRecorder.stop();
+  document.getElementById("interviewRecordingStatus").style.display = "none";
+
+  interviewRecorder.onstop = async () => {
+    const audioBlob = new Blob(interviewAudioChunks, {
+      type: "audio/webm"
+    });
+
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "interview_answer.webm");
+    formData.append("question", currentInterviewQuestion);
+    formData.append("job_description", latestJobDescription);
+
+    try {
+      const token = localStorage.getItem("token");
+      const headers = {};
+
+      if (token) {
+        headers["Authorization"] = "Bearer " + token;
+      }
+
+      const response = await fetch("/voice-interview-evaluate", {
+        method: "POST",
+        headers: headers,
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      document.getElementById("voiceInterviewResult").style.display = "block";
+      document.getElementById("candidateTranscript").innerText = data.transcript;
+      document.getElementById("interviewEvaluation").innerText = data.evaluation;
+
+      if (data.saved_to_database) {
+        alert("Interview evaluation saved to history.");
+      }
+
+    } catch (error) {
+      alert("Interview evaluation failed.");
     }
   };
 }
