@@ -12,7 +12,7 @@
     }
 
     .container {
-      max-width: 1150px;
+      max-width: 1100px;
       margin: 40px auto;
       background: white;
       padding: 35px;
@@ -37,8 +37,7 @@
       margin-top: 20px;
     }
 
-    input,
-    textarea {
+    input, textarea {
       width: 100%;
       padding: 12px;
       margin-top: 8px;
@@ -68,35 +67,19 @@
       background: #0f7b4f;
     }
 
-    .download-btn:hover {
-      background: #095d3b;
-    }
-
     .mock-btn {
       background: #7b1fa2;
-    }
-
-    .mock-btn:hover {
-      background: #5e1680;
     }
 
     .record-btn {
       background: #c62828;
     }
 
-    .record-btn:hover {
-      background: #9f1f1f;
-    }
-
     .stop-btn {
       background: #ef6c00;
     }
 
-    .stop-btn:hover {
-      background: #c65a00;
-    }
-
-    .loading {
+    .loading, .recording-status {
       display: none;
       margin-top: 20px;
       text-align: center;
@@ -105,10 +88,6 @@
     }
 
     .recording-status {
-      display: none;
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
       color: #c62828;
     }
 
@@ -137,15 +116,33 @@
       gap: 20px;
     }
 
-    .card {
-      background: #fafafa;
+    .card, .section-card, .bullet-card, .mock-card {
       padding: 18px;
       border-radius: 12px;
       border: 1px solid #ddd;
       margin-top: 20px;
     }
 
-    .card h3 {
+    .card {
+      background: #fafafa;
+    }
+
+    .section-card {
+      background: #fff8e6;
+      border-color: #f1d48a;
+    }
+
+    .bullet-card {
+      background: #eefaf1;
+      border-color: #b8e6c2;
+    }
+
+    .mock-card {
+      background: #f7edff;
+      border-color: #d7b8ef;
+    }
+
+    h3 {
       margin-top: 0;
       color: #1f3c88;
     }
@@ -159,57 +156,13 @@
       line-height: 1.5;
     }
 
-    .section-card {
-      background: #fff8e6;
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid #f1d48a;
-      margin-top: 20px;
-    }
-
-    .section-card h3 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .bullet-card {
-      background: #eefaf1;
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid #b8e6c2;
-      margin-top: 20px;
-    }
-
-    .bullet-card h3 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .mock-card {
-      background: #f7edff;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #d7b8ef;
-      margin-top: 25px;
-    }
-
-    .mock-card h3 {
-      color: #7b1fa2;
-      margin-top: 0;
-    }
-
-    .feedback-score {
-      font-size: 22px;
-      font-weight: bold;
-      color: #7b1fa2;
-    }
-
-    .star-box {
+    pre {
+      white-space: pre-wrap;
       background: #f8f8f8;
       padding: 15px;
       border-radius: 10px;
-      margin-top: 15px;
       border: 1px solid #ddd;
+      line-height: 1.5;
     }
 
     @media (max-width: 700px) {
@@ -232,8 +185,8 @@
   <h1>AI Resume + Interview Assistant</h1>
 
   <p class="subtitle">
-    Upload your resume and paste a job description to analyze ATS score,
-    improve resume quality, prepare for interviews, and practice with voice feedback.
+    Upload your resume and paste a job description to get GPT-powered ATS analysis,
+    resume improvement, interview questions, and mock interview feedback.
   </p>
 
   <label>Upload Resume (PDF or DOCX)</label>
@@ -245,7 +198,7 @@
   <button onclick="analyzeResume()">Analyze Resume</button>
 
   <div class="loading" id="loading">
-    Analyzing resume... Please wait.
+    Analyzing resume with GPT... Please wait.
   </div>
 
   <div class="result" id="result">
@@ -254,10 +207,19 @@
 
       <div class="score-card">
         <h2>ATS Match Score</h2>
-        <div class="score" id="matchScore"></div>
+        <div class="score" id="atsScore"></div>
       </div>
 
       <div class="grid">
+        <div class="card">
+          <h3>Resume Skills</h3>
+          <ul id="resumeSkills"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Job Description Skills</h3>
+          <ul id="jobSkills"></ul>
+        </div>
 
         <div class="card">
           <h3>Matched Skills</h3>
@@ -268,154 +230,64 @@
           <h3>Missing Skills</h3>
           <ul id="missingSkills"></ul>
         </div>
-
-        <div class="card">
-          <h3>Strong Keywords</h3>
-          <ul id="strongKeywords"></ul>
-        </div>
-
-        <div class="card">
-          <h3>Weak Sections</h3>
-          <ul id="weakSections"></ul>
-        </div>
-
-      </div>
-
-      <div class="grid">
-
-        <div class="section-card">
-          <h3>Education</h3>
-          <ul id="education"></ul>
-        </div>
-
-        <div class="section-card">
-          <h3>Experience</h3>
-          <ul id="experience"></ul>
-        </div>
-
-      </div>
-
-      <div class="grid">
-
-        <div class="section-card">
-          <h3>Projects</h3>
-          <ul id="projects"></ul>
-        </div>
-
-        <div class="section-card">
-          <h3>Certifications</h3>
-          <ul id="certifications"></ul>
-        </div>
-
       </div>
 
       <div class="section-card">
-        <h3>Improved Professional Summary</h3>
-        <p id="improvedSummary"></p>
+        <h3>GPT Improved Professional Summary</h3>
+        <pre id="improvedSummary"></pre>
       </div>
 
       <div class="bullet-card">
-        <h3>Better Project Descriptions</h3>
-        <ul id="betterProjects"></ul>
+        <h3>GPT Better Project Descriptions</h3>
+        <pre id="betterProjects"></pre>
       </div>
 
       <div class="section-card">
-        <h3>Role-Specific Keywords</h3>
-        <ul id="roleKeywords"></ul>
+        <h3>GPT Role-Specific Keywords</h3>
+        <pre id="roleKeywords"></pre>
       </div>
 
       <div class="section-card">
-        <h3>Resume Improvement Suggestions</h3>
-        <ul id="resumeSuggestions"></ul>
-      </div>
-
-      <div class="bullet-card">
-        <h3>ATS-Friendly Resume Bullet Points</h3>
-        <ul id="resumeBullets"></ul>
-      </div>
-
-      <div class="grid">
-
-        <div class="section-card">
-          <h3>HR Questions</h3>
-          <ul id="hrQuestions"></ul>
-        </div>
-
-        <div class="section-card">
-          <h3>Technical Questions</h3>
-          <ul id="technicalQuestions"></ul>
-        </div>
-
+        <h3>GPT Interview Questions + STAR Answers</h3>
+        <pre id="interviewQuestions"></pre>
       </div>
 
       <div class="section-card">
-        <h3>Behavioral Questions</h3>
-        <ul id="behavioralQuestions"></ul>
-      </div>
-
-      <div class="section-card">
-        <h3>STAR Format Answers</h3>
-        <div id="starAnswers"></div>
+        <h3>Resume Preview</h3>
+        <pre id="resumePreview"></pre>
       </div>
 
     </div>
 
-    <button class="download-btn" onclick="downloadReport()">
-      Download Report
-    </button>
+    <button class="download-btn" onclick="downloadReport()">Download Report</button>
 
     <div class="mock-card">
-
       <h3>Mock Interview Feedback</h3>
 
       <label>Type Your Interview Answer</label>
       <textarea id="mockAnswer" rows="8" placeholder="Type your interview answer here..."></textarea>
 
-      <button class="mock-btn" onclick="getMockFeedback()">
-        Analyze Typed Answer
-      </button>
+      <button class="mock-btn" onclick="analyzeTypedAnswer()">Analyze Typed Answer</button>
 
-      <button class="record-btn" onclick="startRecording()">
-        Start Voice Recording
-      </button>
+      <button class="record-btn" onclick="startRecording()">Start Voice Recording</button>
 
-      <button class="stop-btn" onclick="stopRecording()">
-        Stop Recording & Analyze
-      </button>
+      <button class="stop-btn" onclick="stopRecording()">Stop Recording & Analyze</button>
 
       <div class="recording-status" id="recordingStatus">
         Recording... speak your answer now.
       </div>
 
       <div id="mockFeedbackResult" style="display:none; margin-top:20px;">
-
-        <p class="feedback-score">
-          Clarity Score:
-          <span id="clarityScore"></span>
-        </p>
-
-        <p class="feedback-score">
-          Confidence Score:
-          <span id="confidenceScore"></span>
-        </p>
-
         <div class="section-card">
-          <h3>Transcribed Answer</h3>
-          <p id="transcribedAnswer"></p>
-        </div>
-
-        <div class="section-card">
-          <h3>Missing Points</h3>
-          <ul id="missingPoints"></ul>
+          <h3>Transcribed / Typed Answer</h3>
+          <pre id="transcribedAnswer"></pre>
         </div>
 
         <div class="bullet-card">
-          <h3>Improved Answer</h3>
-          <p id="improvedAnswer"></p>
+          <h3>GPT Feedback</h3>
+          <pre id="feedbackOutput"></pre>
         </div>
-
       </div>
-
     </div>
 
   </div>
@@ -448,7 +320,7 @@ async function analyzeResume() {
   formData.append("job_description", jobDescription);
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/analyze-resume", {
+    const response = await fetch("/analyze-resume", {
       method: "POST",
       body: formData
     });
@@ -464,36 +336,24 @@ async function analyzeResume() {
 
     document.getElementById("result").style.display = "block";
 
-    document.getElementById("matchScore").innerText = data.match_score + "%";
+    document.getElementById("atsScore").innerText = data.ats_score + "%";
 
+    showList("resumeSkills", data.resume_skills);
+    showList("jobSkills", data.job_description_skills);
     showList("matchedSkills", data.matched_skills);
     showList("missingSkills", data.missing_skills);
-    showList("strongKeywords", data.strong_keywords);
-    showList("weakSections", data.weak_sections);
-
-    showList("education", data.education);
-    showList("experience", data.experience);
-    showList("projects", data.projects);
-    showList("certifications", data.certifications);
 
     document.getElementById("improvedSummary").innerText = data.improved_summary;
-
-    showList("betterProjects", data.better_project_descriptions);
-    showList("roleKeywords", data.role_keywords);
-    showList("resumeSuggestions", data.resume_suggestions);
-    showList("resumeBullets", data.resume_bullets);
-    showList("hrQuestions", data.hr_questions);
-    showList("technicalQuestions", data.technical_questions);
-    showList("behavioralQuestions", data.behavioral_questions);
-
-    showStarAnswers(data.star_answers);
+    document.getElementById("betterProjects").innerText = data.better_project_descriptions;
+    document.getElementById("roleKeywords").innerText = data.role_keywords;
+    document.getElementById("interviewQuestions").innerText = data.interview_questions;
+    document.getElementById("resumePreview").innerText = data.resume_preview;
 
   } catch (error) {
     document.getElementById("loading").style.display = "none";
-    alert("Something went wrong. Make sure Flask backend is running.");
+    alert("Something went wrong. Make sure backend is running.");
   }
 }
-
 
 function showList(elementId, items) {
   const list = document.getElementById(elementId);
@@ -511,34 +371,7 @@ function showList(elementId, items) {
   });
 }
 
-
-function showStarAnswers(starAnswers) {
-  const container = document.getElementById("starAnswers");
-  container.innerHTML = "";
-
-  if (!starAnswers || starAnswers.length === 0) {
-    container.innerHTML = "<p>None found</p>";
-    return;
-  }
-
-  starAnswers.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "star-box";
-
-    div.innerHTML = `
-      <h4>${item.question}</h4>
-      <p><b>Situation:</b> ${item.answer.situation}</p>
-      <p><b>Task:</b> ${item.answer.task}</p>
-      <p><b>Action:</b> ${item.answer.action}</p>
-      <p><b>Result:</b> ${item.answer.result}</p>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-
-async function getMockFeedback() {
+async function analyzeTypedAnswer() {
   const answer = document.getElementById("mockAnswer").value;
 
   if (!answer.trim()) {
@@ -547,7 +380,7 @@ async function getMockFeedback() {
   }
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/mock-feedback", {
+    const response = await fetch("/analyze-answer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -559,21 +392,19 @@ async function getMockFeedback() {
 
     const data = await response.json();
 
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
     document.getElementById("mockFeedbackResult").style.display = "block";
-
-    document.getElementById("clarityScore").innerText = data.clarity_score + "/100";
-    document.getElementById("confidenceScore").innerText = data.confidence_score + "/100";
     document.getElementById("transcribedAnswer").innerText = answer;
-
-    showList("missingPoints", data.missing_points);
-
-    document.getElementById("improvedAnswer").innerText = data.improved_answer;
+    document.getElementById("feedbackOutput").innerText = data.feedback;
 
   } catch (error) {
     alert("Unable to analyze answer.");
   }
 }
-
 
 async function startRecording() {
   audioChunks = [];
@@ -597,7 +428,6 @@ async function startRecording() {
   }
 }
 
-
 async function stopRecording() {
   if (!mediaRecorder) {
     alert("Please start recording first.");
@@ -605,7 +435,6 @@ async function stopRecording() {
   }
 
   mediaRecorder.stop();
-
   document.getElementById("recordingStatus").style.display = "none";
 
   mediaRecorder.onstop = async () => {
@@ -617,7 +446,7 @@ async function stopRecording() {
     formData.append("audio", audioBlob, "answer.webm");
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/voice-feedback", {
+      const response = await fetch("/analyze-voice", {
         method: "POST",
         body: formData
       });
@@ -630,23 +459,15 @@ async function stopRecording() {
       }
 
       document.getElementById("mockFeedbackResult").style.display = "block";
-
-      document.getElementById("clarityScore").innerText = data.clarity_score + "/100";
-      document.getElementById("confidenceScore").innerText = data.confidence_score + "/100";
-
-      document.getElementById("transcribedAnswer").innerText = data.transcribed_text;
-      document.getElementById("mockAnswer").value = data.transcribed_text;
-
-      showList("missingPoints", data.missing_points);
-
-      document.getElementById("improvedAnswer").innerText = data.improved_answer;
+      document.getElementById("transcribedAnswer").innerText = data.transcript;
+      document.getElementById("mockAnswer").value = data.transcript;
+      document.getElementById("feedbackOutput").innerText = data.feedback;
 
     } catch (error) {
       alert("Voice analysis failed.");
     }
   };
 }
-
 
 function downloadReport() {
   const reportContent = document.getElementById("reportContent").innerHTML;
@@ -657,7 +478,6 @@ function downloadReport() {
     <html>
       <head>
         <title>Resume Analysis Report</title>
-
         <style>
           body {
             font-family: Arial;
@@ -669,13 +489,9 @@ function downloadReport() {
             color: #1f3c88;
           }
 
-          .score {
-            font-size: 40px;
-            font-weight: bold;
-          }
-
-          ul {
-            padding-left: 20px;
+          pre {
+            white-space: pre-wrap;
+            line-height: 1.5;
           }
 
           li {

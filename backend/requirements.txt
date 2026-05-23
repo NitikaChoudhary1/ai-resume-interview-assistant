@@ -5,3 +5,5 @@ pdfplumber
 python-docx
 SpeechRecognition
 pydub
+openai
+python-dotenv
